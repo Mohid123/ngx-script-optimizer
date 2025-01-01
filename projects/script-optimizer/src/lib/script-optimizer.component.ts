@@ -27,11 +27,9 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     try {
       if (this.renderStrategy == 'server') {
-        debugger
         this.addScriptToHead();
       }
       if(this.renderStrategy == 'client') {
-        debugger
         afterNextRender(() => {
           this.addScriptToHead();
         }, {injector: this.injector})
@@ -89,9 +87,7 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
     if (this.loadStrategy == 'idle') {
       this.scriptElem.defer = true;
       this.scriptElem.async = true;
-      debugger
       if (typeof window != 'undefined' && 'requestIdleCallback' in window) {
-        debugger
         if (this.appendTo == 'head') {
           this.document.head.appendChild(this.scriptElem);
         }

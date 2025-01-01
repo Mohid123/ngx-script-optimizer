@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ScriptOptimizerComponent } from '../../projects/script-optimizer/src/public-api';
+import { ScriptOptimizerComponent } from 'script-optimizer';
 
 @Component({
   selector: 'app-root',
