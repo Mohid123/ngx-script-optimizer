@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, Inject, Injector, Input, OnDestroy, OnInit } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, EventEmitter, Inject, Injector, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 type ScriptLoadingStrategy = 'eager' | 'lazy' | 'idle' | 'worker';
 type ScriptAppendStrategy = 'body' | 'head';
@@ -21,6 +21,8 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
   @Input() appendTo: ScriptAppendStrategy = 'head';
   @Input() loadStrategy: ScriptLoadingStrategy = 'lazy';
   @Input() renderStrategy: ScriptRenderStrategy = 'server';
+  @Output() onLoad = new EventEmitter<void>();
+  @Output() onError = new EventEmitter<ErrorEvent | any>();
   private worker?: Worker;
   private scriptElem!: HTMLScriptElement;
 
@@ -96,6 +98,15 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
         }
       }
     }
+    this.scriptElem.onload = () => {
+      console.log(`Script loaded successfully`);
+      this.onLoad.emit();
+    };
+  
+    this.scriptElem.onerror = (error: any) => {
+      console.error(`Script failed to load: ${error}`);
+      this.onError.emit(error);
+    };
   }
 
   private createAndExecuteWorker(scriptContent: string): void {
