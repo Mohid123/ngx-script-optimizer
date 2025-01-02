@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ScriptOptimizerComponent } from 'script-optimizer';
+import { ScriptOptimizerComponent } from '../../projects/script-optimizer/src/public-api';
 
 @Component({
   selector: 'app-root',
@@ -9,5 +9,12 @@ import { ScriptOptimizerComponent } from 'script-optimizer';
 })
 export class AppComponent {
   title = 'ngx-script-optimizer';
-  content = `console.log('HEY IT WORKS!')`;
+  content = `function sum(a, b) {
+    return a * b + a + b;
+  }
+  console.log(sum(1,2))`;
+
+  runAfterLoad() {
+    console.log('I ran after loading')
+  }
 }

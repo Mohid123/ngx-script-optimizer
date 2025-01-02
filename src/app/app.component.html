@@ -1,6 +1,6 @@
 <p>NOW LOADING...!</p>
 <ngx-script-optimizer
   [scriptContent]="content"
-  loadStrategy="idle"
-  renderStrategy="server"
+  (onLoad)="runAfterLoad()"
+  renderStrategy="client"
 ></ngx-script-optimizer>

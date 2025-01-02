@@ -1,5 +1,5 @@
-import { DOCUMENT } from '@angular/common';
-import { afterNextRender, ChangeDetectionStrategy, Component, EventEmitter, Inject, Injector, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { afterNextRender, ChangeDetectionStrategy, Component, EventEmitter, Inject, Injector, Input, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 
 type ScriptLoadingStrategy = 'eager' | 'lazy' | 'idle' | 'worker';
 type ScriptAppendStrategy = 'body' | 'head';
@@ -13,6 +13,7 @@ type ScriptRenderStrategy = 'server' | 'client';
 export class ScriptOptimizerComponent implements OnInit, OnDestroy {
   constructor(
     @Inject(DOCUMENT) private document: Document,
+    @Inject(PLATFORM_ID) private platformId: any,
     private injector: Injector
   ) { }
 
@@ -21,14 +22,14 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
   @Input() appendTo: ScriptAppendStrategy = 'head';
   @Input() loadStrategy: ScriptLoadingStrategy = 'lazy';
   @Input() renderStrategy: ScriptRenderStrategy = 'server';
+  @Input() contentType: string = 'text/javascript';
   @Output() onLoad = new EventEmitter<void>();
-  @Output() onError = new EventEmitter<ErrorEvent | any>();
   private worker?: Worker;
   private scriptElem!: HTMLScriptElement;
 
   ngOnInit(): void {
     try {
-      if (this.renderStrategy == 'server') {
+      if (isPlatformServer(this.platformId) && this.renderStrategy == 'server') {
         this.addScriptToHead();
       }
       if(this.renderStrategy == 'client') {
@@ -60,6 +61,7 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
       );
     }
     this.scriptElem = this.document.createElement('script');
+    this.scriptElem.type = this.contentType;
     if (this.src) {
       this.scriptElem.src = this.src;
     }
@@ -68,45 +70,24 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
     }
     if (this.loadStrategy == 'eager') {
       this.scriptElem.defer = false;
-      this.scriptElem.async = false;
-      if (this.appendTo == 'head') {
-        this.document.head.appendChild(this.scriptElem);
-      }
-      if (this.appendTo == 'body') {
-        this.document.body.appendChild(this.scriptElem);
-      }
+      this.scriptElem.async = true;
+      this.appendScripts();
+      this.onLoad.emit();
     }
     if (this.loadStrategy == 'lazy') {
       this.scriptElem.defer = true;
       this.scriptElem.async = true;
-      if (this.appendTo == 'head') {
-        this.document.head.appendChild(this.scriptElem);
-      }
-      if (this.appendTo == 'body') {
-        this.document.body.appendChild(this.scriptElem);
-      }
+      this.appendScripts();
+      this.onLoad.emit();
     }
     if (this.loadStrategy == 'idle') {
       this.scriptElem.defer = true;
       this.scriptElem.async = true;
       if (typeof window != 'undefined' && 'requestIdleCallback' in window) {
-        if (this.appendTo == 'head') {
-          this.document.head.appendChild(this.scriptElem);
-        }
-        if (this.appendTo == 'body') {
-          this.document.body.appendChild(this.scriptElem);
-        }
+        this.appendScripts();
+        this.onLoad.emit();
       }
     }
-    this.scriptElem.onload = () => {
-      console.log(`Script loaded successfully`);
-      this.onLoad.emit();
-    };
-  
-    this.scriptElem.onerror = (error: any) => {
-      console.error(`Script failed to load: ${error}`);
-      this.onError.emit(error);
-    };
   }
 
   private createAndExecuteWorker(scriptContent: string): void {
@@ -116,6 +97,7 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
 
     this.worker.onmessage = (event) => {
       console.log('Message from worker:', event.data);
+      this.onLoad.emit();
     };
 
     this.worker.onerror = (error) => {
@@ -123,7 +105,16 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
     };
   }
 
-  ngOnDestroy() {
+  private appendScripts(): void {
+    if (this.appendTo == 'head') {
+      this.document.head.appendChild(this.scriptElem);
+    }
+    if (this.appendTo == 'body') {
+      this.document.body.appendChild(this.scriptElem);
+    }
+  }
+
+  ngOnDestroy(): void {
     if (this.scriptElem && typeof document != 'undefined') {
       document?.body?.removeChild(this.scriptElem);
       document?.head?.removeChild(this.scriptElem);
