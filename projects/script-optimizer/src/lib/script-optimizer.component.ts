@@ -1,4 +1,4 @@
-import { DOCUMENT, isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { DOCUMENT, isPlatformServer } from '@angular/common';
 import { afterNextRender, ChangeDetectionStrategy, Component, EventEmitter, Inject, Injector, Input, OnDestroy, OnInit, Output, PLATFORM_ID } from '@angular/core';
 
 type ScriptLoadingStrategy = 'eager' | 'lazy' | 'idle' | 'worker';
