@@ -134,7 +134,7 @@ Execute the script when the browser's main thread is idle:
 #### **Web Worker Execution Example**
 
 Run a script in a Web Worker:
-
+##### **Note**: Please note that only the `scriptContent` attribute is currently compatible with the web worker option.
 ```html
 <ngx-script-optimizer
   [scriptContent]="`onmessage = function(e) {
