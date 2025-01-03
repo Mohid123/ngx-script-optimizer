@@ -1,5 +1,5 @@
 {
-  "name": "ngx-script-optimizer",
+  "name": "script-optimizer",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -7,7 +7,7 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:ngx-script-optimizer": "node dist/ngx-script-optimizer/server/server.mjs"
+    "serve:ssr:script-optimizer": "node dist/script-optimizer/server/server.mjs"
   },
   "private": true,
   "dependencies": {

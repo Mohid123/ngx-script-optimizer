@@ -60,6 +60,11 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
         'ScriptOptimizerComponent: Either `src` or `scriptContent` must be provided.'
       );
     }
+    if(this.scriptContent && this.src) {
+      throw new Error(
+        'ScriptOptimizerComponent: Both `src` or `scriptContent` cannot be provided at the same time.'
+      );
+    }
     this.scriptElem = this.document.createElement('script');
     this.scriptElem.type = this.contentType;
     if (this.src) {

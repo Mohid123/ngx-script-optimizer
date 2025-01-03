@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/ng-packagr/ng-package.schema.json",
-  "dest": "../../dist/script-optimizer",
+  "dest": "../../dist/ngx-script-optimizer",
   "lib": {
     "entryFile": "src/public-api.ts"
   }

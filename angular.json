@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ngx-script-optimizer": {
+    "script-optimizer": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/ngx-script-optimizer",
+            "outputPath": "dist/script-optimizer",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -64,10 +64,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "ngx-script-optimizer:build:production"
+              "buildTarget": "script-optimizer:build:production"
             },
             "development": {
-              "buildTarget": "ngx-script-optimizer:build:development"
+              "buildTarget": "script-optimizer:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -97,23 +97,23 @@
         }
       }
     },
-    "script-optimizer": {
+    "ngx-script-optimizer": {
       "projectType": "library",
-      "root": "projects/script-optimizer",
-      "sourceRoot": "projects/script-optimizer/src",
+      "root": "projects/ngx-script-optimizer",
+      "sourceRoot": "projects/ngx-script-optimizer/src",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
-            "project": "projects/script-optimizer/ng-package.json"
+            "project": "projects/ngx-script-optimizer/ng-package.json"
           },
           "configurations": {
             "production": {
-              "tsConfig": "projects/script-optimizer/tsconfig.lib.prod.json"
+              "tsConfig": "projects/ngx-script-optimizer/tsconfig.lib.prod.json"
             },
             "development": {
-              "tsConfig": "projects/script-optimizer/tsconfig.lib.json"
+              "tsConfig": "projects/ngx-script-optimizer/tsconfig.lib.json"
             }
           },
           "defaultConfiguration": "production"
@@ -121,7 +121,7 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "tsConfig": "projects/script-optimizer/tsconfig.spec.json",
+            "tsConfig": "projects/ngx-script-optimizer/tsconfig.spec.json",
             "polyfills": [
               "zone.js",
               "zone.js/testing"
