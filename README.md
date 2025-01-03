@@ -161,6 +161,8 @@ Run a script in a Web Worker:
 | `appendTo`       | `head` / `body`  | Specifies where to attach the script in the DOM. Default value is `head`                         |
 | `contentType`    | `text/javascript` | Specifies the MIME type of the script. Default value is `text/javascript`                                     |
 | `(onLoad)`       | `function`       | Event triggered immediately after the script is executed. Note that the onLoad method cannot be used in conjunction with SSR as it can only be called on the client side.                            |
+| `integrity`       | `string`       | Optionally provide the script `integrity` attribute. |
+| `origin`       | `string`       | Optionally provide the script `crossorigin` attribute.  |
 
 ---
 

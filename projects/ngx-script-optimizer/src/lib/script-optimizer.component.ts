@@ -23,6 +23,8 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
   @Input() loadStrategy: ScriptLoadingStrategy = 'lazy';
   @Input() renderStrategy: ScriptRenderStrategy = 'server';
   @Input() contentType: string = 'text/javascript';
+  @Input() integrity?: string | any;
+  @Input() origin?: string | any;
   @Output() onLoad = new EventEmitter<void>();
   private worker?: Worker;
   private scriptElem!: HTMLScriptElement;
@@ -67,6 +69,8 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
     }
     this.scriptElem = this.document.createElement('script');
     this.scriptElem.type = this.contentType;
+    this.scriptElem.integrity = this.integrity;
+    this.scriptElem.crossOrigin = this.origin;
     if (this.src) {
       this.scriptElem.src = this.src;
     }

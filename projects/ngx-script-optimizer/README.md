@@ -25,7 +25,7 @@ Supports multiple loading strategies:
 - **Worker:** Runs scripts in a Web Worker for non-blocking execution.
 
 ### **Customizable Script Placement:**
-Choose where scripts are appended (head or body), giving you full control over your HTML structure.
+Choose where scripts are appended (head or body), giving you full control over your HTML structure. Call scripts exclusively on a page to page basis or globally based on your need. The scripts are automatically removed from the DOM once the page is destroyed.
 
 ### **Lightning Fast & Lightweight:**
 Minimal impact on your bundle size with a developer-friendly API that focuses on speed and simplicity.
@@ -160,7 +160,9 @@ Run a script in a Web Worker:
 | `loadStrategy`   | `eager` / `lazy` / `idle` / `worker` | Controls when and how the script loads. Default value is `lazy`.                                     |
 | `appendTo`       | `head` / `body`  | Specifies where to attach the script in the DOM. Default value is `head`                         |
 | `contentType`    | `text/javascript` | Specifies the MIME type of the script. Default value is `text/javascript`                                     |
-| `(onLoad)`       | `function`       | Event triggered immediately after the script is executed.                            |
+| `(onLoad)`       | `function`       | Event triggered immediately after the script is executed. Note that the onLoad method cannot be used in conjunction with SSR as it can only be called on the client side.                            |
+| `integrity`       | `string`       | Optionally provide the script `integrity` attribute. |
+| `origin`       | `string`       | Optionally provide the script `crossorigin` attribute.  |
 
 ---
 
