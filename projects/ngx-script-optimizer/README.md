@@ -74,12 +74,11 @@ In your HTML:
 
 ```html
 <ngx-script-optimizer
-  [scriptContent]="content"
+  src="https://example.com/api.js"
   (onLoad)="runAfterLoad()"
   renderStrategy="client"
   loadStrategy="lazy"
   appendTo="head"
-  src="https://example.com/api.js"
   contentType="text/javascript"
 ></ngx-script-optimizer>
 ```
