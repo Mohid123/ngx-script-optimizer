@@ -43,6 +43,16 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
   }
 
   private addScriptToHead(): void {
+    if(!this.scriptContent && !this.src) {
+      throw new Error(
+        'ScriptOptimizerComponent: Either `src` or `scriptContent` must be provided.'
+      );
+    }
+    if(this.scriptContent && this.src) {
+      throw new Error(
+        'ScriptOptimizerComponent: Both `src` or `scriptContent` cannot be provided at the same time.'
+      );
+    }
     if (this.loadStrategy == 'worker') {
       if (typeof Worker !== 'undefined') {
         if(this.scriptContent) {
@@ -55,16 +65,6 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
       }
       return
     }
-    if(!this.scriptContent && !this.src) {
-      throw new Error(
-        'ScriptOptimizerComponent: Either `src` or `scriptContent` must be provided.'
-      );
-    }
-    if(this.scriptContent && this.src) {
-      throw new Error(
-        'ScriptOptimizerComponent: Both `src` or `scriptContent` cannot be provided at the same time.'
-      );
-    }
     this.scriptElem = this.document.createElement('script');
     this.scriptElem.type = this.contentType;
     if (this.src) {
@@ -73,24 +73,24 @@ export class ScriptOptimizerComponent implements OnInit, OnDestroy {
     if (this.scriptContent) {
       this.scriptElem.text = this.scriptContent;
     }
+    this.scriptElem.onload = () => {
+      this.onLoad.emit();
+    }
     if (this.loadStrategy == 'eager') {
       this.scriptElem.defer = false;
       this.scriptElem.async = true;
       this.appendScripts();
-      this.onLoad.emit();
     }
     if (this.loadStrategy == 'lazy') {
       this.scriptElem.defer = true;
       this.scriptElem.async = true;
       this.appendScripts();
-      this.onLoad.emit();
     }
     if (this.loadStrategy == 'idle') {
       this.scriptElem.defer = true;
       this.scriptElem.async = true;
       if (typeof window != 'undefined' && 'requestIdleCallback' in window) {
         this.appendScripts();
-        this.onLoad.emit();
       }
     }
   }

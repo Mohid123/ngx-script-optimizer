@@ -4,3 +4,12 @@
   (onLoad)="runAfterLoad()"
   renderStrategy="client"
 ></ngx-script-optimizer>
+
+<ngx-script-optimizer
+  src="https://cdn.jsdelivr.net/npm/chart.js"
+  (onLoad)="runAfterLoad2()"
+  renderStrategy="client"
+  loadStrategy="idle"
+></ngx-script-optimizer>
+
+<canvas id="myChart"></canvas>
